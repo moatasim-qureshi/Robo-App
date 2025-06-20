@@ -1,0 +1,9 @@
+.canvas-main{
+    background-image: url('/canvas-background2.jpg');
+    background-size: cover;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}

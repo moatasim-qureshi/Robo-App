@@ -1,0 +1,23 @@
+.background-container {
+  position: relative;
+  background-image: url('/images.jpeg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.background-container::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* dark overlay */
+
+  z-index: 0;
+}
+
+.weather-widget {
+  position: relative;
+  z-index: 1;
+}
