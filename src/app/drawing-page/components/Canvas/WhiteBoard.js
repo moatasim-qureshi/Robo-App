@@ -251,103 +251,10 @@ const startDrawing = (e) => {
 };
 
 
-// const draw = (e) => {
-//   const { offsetX, offsetY } = e.nativeEvent;
-
-//   // — Resizing mode
-//   if (tool === 'select' && activeHandle && selectedId !== null) {
-//     setStrokes((prev) =>
-//       prev.map((s) => {
-//         if (s.id !== selectedId || Array.isArray(s)) return s;
-
-//         let newStart = { ...s.start };
-//         let newEnd = { ...s.end };
-
-//         // Adjust start/end based on which handle is active
-//         switch (activeHandle) {
-//           case 'tl':
-//             newStart.x = offsetX; newStart.y = offsetY; break;
-//           case 'tr':
-//             newEnd.x = offsetX; newStart.y = offsetY; break;
-//           case 'bl':
-//             newStart.x = offsetX; newEnd.y = offsetY; break;
-//           case 'br':
-//             newEnd.x = offsetX; newEnd.y = offsetY; break;
-//           case 't':
-//             newStart.y = offsetY; break;
-//           case 'b':
-//             newEnd.y = offsetY; break;
-//           case 'l':
-//             newStart.x = offsetX; break;
-//           case 'r':
-//             newEnd.x = offsetX; break;
-//         }
-
-//         // Normalize coordinates
-//         const finalStart = {
-//           x: Math.min(newStart.x, newEnd.x),
-//           y: Math.min(newStart.y, newEnd.y),
-//         };
-//         const finalEnd = {
-//           x: Math.max(newStart.x, newEnd.x),
-//           y: Math.max(newStart.y, newEnd.y),
-//         };
-
-//         const boundingBox = {
-//           x: finalStart.x,
-//           y: finalStart.y,
-//           width: finalEnd.x - finalStart.x,
-//           height: finalEnd.y - finalStart.y,
-//         };
-
-//         return {
-//           ...s,
-//           start: finalStart,
-//           end: finalEnd,
-//           boundingBox,
-//         };
-//       })
-//     );
-//     return; // Exit to prevent dragging while resizing
-//   }
-
-//   // — Dragging mode
-//   if (tool === 'select' && isDragging && selectedId !== null) {
-//     moveShape(offsetX, offsetY);
-//     return;
-//   }
-
-//   // — Pen drawing mode
-//   if (tool === 'pen' && drawing) {
-//     const ctx = canvasRef.current.getContext('2d');
-//     ctx.lineTo(offsetX, offsetY);
-//     ctx.strokeStyle = penColor;
-//     ctx.lineWidth = penSize;
-//     ctx.lineCap = 'round';
-//     ctx.stroke();
-
-//     setStrokes((prev) => {
-//       const updated = [...prev];
-//       updated[updated.length - 1].push({
-//         x: offsetX, y: offsetY,
-//         color: penColor, size: penSize,
-//       });
-//       return updated;
-//     });
-//     return;
-//   }
-
-//   // — Live shape preview
-//   if (startPoint) {
-//     setCurrentEndPoint({ x: offsetX, y: offsetY });
-//   }
-// };
-
-
 const draw = (e) => {
   const { offsetX, offsetY } = e.nativeEvent;
 
-  // — Resizing mode
+  
   if (tool === 'select' && activeHandle && selectedId !== null) {
     setStrokes((prev) =>
       prev.map((s) => {
@@ -376,7 +283,7 @@ const draw = (e) => {
             newEnd.x = offsetX; break;
         }
 
-        // Keep raw start/end to allow flipping
+      
         const boundingBox = {
           x: Math.min(newStart.x, newEnd.x),
           y: Math.min(newStart.y, newEnd.y),
@@ -395,13 +302,13 @@ const draw = (e) => {
     return;
   }
 
-  // — Dragging mode
+
   if (tool === 'select' && isDragging && selectedId !== null) {
     moveShape(offsetX, offsetY);
     return;
   }
 
-  // — Pen drawing mode
+
   if (tool === 'pen' && drawing) {
     const ctx = canvasRef.current.getContext('2d');
     ctx.lineTo(offsetX, offsetY);
@@ -421,7 +328,7 @@ const draw = (e) => {
     return;
   }
 
-  // — Live shape preview
+ 
   if (startPoint) {
     setCurrentEndPoint({ x: offsetX, y: offsetY });
   }
@@ -459,31 +366,6 @@ const draw = (e) => {
   setCurrentEndPoint(null);
   setDragOffset(null);
 };
-
-
-  // const handleCanvasClick = (e) => {
-  //   if (tool !== 'select') return;
-
-  //   const rect = canvasRef.current.getBoundingClientRect();
-  //   const x = e.clientX - rect.left;
-  //   const y = e.clientY - rect.top;
-
-  //   for (let i = strokes.length - 1; i >= 0; i--) {
-  //     const s = strokes[i];
-  //     if (!Array.isArray(s) && s.boundingBox) {
-  //       const { x: bx, y: by, width, height } = s.boundingBox;
-  //       const inside = x >= bx && x <= bx + width && y >= by && y <= by + height;
-
-  //       if (inside) {
-  //         setSelectedId(s.id);
-  //         return;
-  //       }
-  //     }
-  //   }
-
-  //   setSelectedId(null);
-  // };
-
 
   const handleCanvasClick = (e) => {
   const rect = canvasRef.current.getBoundingClientRect();
@@ -723,7 +605,7 @@ return (
       );
     }
 
-    setIsFilled((prev) => !prev); // Also toggle for future shapes
+    setIsFilled((prev) => !prev); 
   }}
 />
 
