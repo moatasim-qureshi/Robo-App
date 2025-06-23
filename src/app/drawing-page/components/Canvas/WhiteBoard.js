@@ -11,24 +11,25 @@ import FillColorToggle from '../Toolbar/FillColor';
 
 
 export default function Whiteboard() {
-const canvasRef = useRef(null);
-const penSizeRef = useRef(null);
-const [drawing, setDrawing] = useState(false);
-const [penSize, setPenSize] = useState(5);
-const [penColor, setPenColor] = useState('#000000');
-const [strokeColor, setStrokeColor] = useState('#000000');
-const [tool, setTool] = useState('pen');
-const [strokes, setStrokes] = useState([]);
-const [startPoint, setStartPoint] = useState(null);
-const [currentEndPoint, setCurrentEndPoint] = useState(null);
-const [selectedId, setSelectedId] = useState(null);
-const [isDragging, setIsDragging] = useState(false);
-const [dragOffset, setDragOffset] = useState(null);
-const [activeHandle, setActiveHandle] = useState(null);
-const [showPenSizeSelector, setShowPenSizeSelector] = useState(false);
-const [isFilled, setIsFilled] = useState(false);
+      const canvasRef = useRef(null);
+      const penSizeRef = useRef(null);
+      const [drawing, setDrawing] = useState(false);
+      const [penSize, setPenSize] = useState(5);
+      const [penColor, setPenColor] = useState('#000000');
+      const [strokeColor, setStrokeColor] = useState('#000000');
+      const [tool, setTool] = useState('pen');
+      const [strokes, setStrokes] = useState([]);
+      const [startPoint, setStartPoint] = useState(null);
+      const [currentEndPoint, setCurrentEndPoint] = useState(null);
+      const [selectedId, setSelectedId] = useState(null);
+      const [isDragging, setIsDragging] = useState(false);
+      const [dragOffset, setDragOffset] = useState(null);
+      const [activeHandle, setActiveHandle] = useState(null);
+      const [showPenSizeSelector, setShowPenSizeSelector] = useState(false);
+      const [isFilled, setIsFilled] = useState(false);
+      const [fillColor, setFillColor] = useState('#000000'); // new state
+      const skipNextClickRef = useRef(false);
 
-const [fillColor, setFillColor] = useState('#000000'); // new state
 
 
 
@@ -360,6 +361,7 @@ const draw = (e) => {
   };
 
     setStrokes((prev) => [...prev, newShape]);
+    
   }
 
   setStartPoint(null);
@@ -368,40 +370,40 @@ const draw = (e) => {
 };
 
   const handleCanvasClick = (e) => {
-  const rect = canvasRef.current.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-  for (let i = strokes.length - 1; i >= 0; i--) {
-    const s = strokes[i];
-    if (!Array.isArray(s) && s.boundingBox) {
-      const { x: bx, y: by, width, height } = s.boundingBox;
-      const inside = x >= bx && x <= bx + width && y >= by && y <= by + height;
+    for (let i = strokes.length - 1; i >= 0; i--) {
+      const s = strokes[i];
+      if (!Array.isArray(s) && s.boundingBox) {
+        const { x: bx, y: by, width, height } = s.boundingBox;
+        const inside = x >= bx && x <= bx + width && y >= by && y <= by + height;
 
-      if (inside) {
-        if (isFilled) {
-          // Fill the shape with current pen color
-          const updatedShape = {
-            ...s,
-            filled: true,
-            fillColor: penColor,
-          };
-          setStrokes((prev) => {
-            const newStrokes = [...prev];
-            newStrokes[i] = updatedShape;
-            return newStrokes;
-          });
-          return;
-        } else {
-          setSelectedId(s.id); // normal select
-          return;
+        if (inside) {
+          if (isFilled) {
+            const updatedShape = {
+              ...s,
+              filled: true,
+              fillColor: penColor,
+            };
+            setStrokes((prev) => {
+              const newStrokes = [...prev];
+              newStrokes[i] = updatedShape;
+              return newStrokes;
+            });
+            return;
+          } else {
+            setSelectedId(s.id);
+            return;
+          }
+
         }
       }
     }
-  }
 
-  setSelectedId(null);
-};
+    setSelectedId(null);
+  };
 
 const moveShape = (x, y) => {
   setStrokes((prev) =>
@@ -516,7 +518,6 @@ return (
       style={{
         display: 'flex',
         flexDirection: 'row',
-        // height: '450px',
         minHeight: '450px',
         background: '#b3b3b3',
         borderRadius: '5px',
